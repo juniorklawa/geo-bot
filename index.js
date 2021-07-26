@@ -2,16 +2,6 @@ const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
 
 async function main() {
-  // const executablePath =
-  //   process.env.PUPPETEER_EXECUTABLE_PATH ||
-  //   (process.pkg
-  //     ? path.join(
-  //         path.dirname(process.execPath),
-  //         "puppeteer",
-  //         ...puppeteer.executablePath().split(path.sep).slice(6) // /snapshot/project/node_modules/puppeteer/.local-chromium
-  //       )
-  //     : puppeteer.executablePath());
-
   const download = require("download-chromium");
   const os = require("os");
   const tmp = os.tmpdir();
@@ -35,6 +25,11 @@ async function main() {
 
   const page = await browser.newPage();
   await page.goto("https://generator.email/");
+
+  const pages = await browser.pages();
+  if (pages.length > 1) {
+    await pages[0].close();
+  }
 
   const email = await page.evaluate(async () => {
     function delay(time) {
@@ -75,6 +70,8 @@ async function main() {
 
   const newAccountPage = await browser.newPage();
   await newAccountPage.goto(newAccountLinkToken);
+
+  await page.close();
 
   await newAccountPage.waitForSelector(
     "#__next > div > main > form > section > section.grid__column.grid__column--span-2 > div > div:nth-child(1) > div.form-field__field > input"
