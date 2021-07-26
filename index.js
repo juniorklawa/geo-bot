@@ -1,8 +1,28 @@
 const fetch = require("node-fetch");
+const puppeteer = require("puppeteer");
 
 async function main() {
-  const puppeteer = require("puppeteer");
+  // const executablePath =
+  //   process.env.PUPPETEER_EXECUTABLE_PATH ||
+  //   (process.pkg
+  //     ? path.join(
+  //         path.dirname(process.execPath),
+  //         "puppeteer",
+  //         ...puppeteer.executablePath().split(path.sep).slice(6) // /snapshot/project/node_modules/puppeteer/.local-chromium
+  //       )
+  //     : puppeteer.executablePath());
+
+  const download = require("download-chromium");
+  const os = require("os");
+  const tmp = os.tmpdir();
+
+  const executablePath = await download({
+    revision: 694644,
+    installPath: `${tmp}/.local-chromium`,
+  });
+
   const browser = await puppeteer.launch({
+    executablePath,
     headless: false,
     defaultViewport: null,
   });

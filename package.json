@@ -6,7 +6,11 @@
   "dependencies": {
     "@cliqz/adblocker-puppeteer": "^1.22.2",
     "axios": "^0.21.1",
+    "download-chromium": "^2.2.1",
     "node-fetch": "^2.6.1",
     "puppeteer": "^10.1.0"
+  },
+  "scripts": {
+    "package": "sudo pkg index.js -t node14-linux-x64,node14-macos-x64,node14-win-x64 --public --output geo-bot"
   }
 }
